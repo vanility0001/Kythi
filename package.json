@@ -1,0 +1,24 @@
+{
+  "name": "kythi-backend",
+  "version": "1.0.0",
+  "description": "Backend for Kythi",
+  "main": "dist/index.js",
+  "repository": "https://github.com/Nekoyre/Kythi.git",
+  "author": "Neko <78627265+Nekoyre@users.noreply.github.com>",
+  "license": "GPL-3.0-only",
+  "private": false,
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "start": "node .",
+    "docker": "yarn build && yarn start"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fastify": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.11",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.2"
+  }
+}
