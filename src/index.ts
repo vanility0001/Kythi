@@ -14,7 +14,7 @@ if (requiredEnvs.some((env) => !process.env[env])) {
 }
 
 server.register(require("fastify-autoload"), {
-  dir: join(__dirname, "routes"),
+  dir: join(__dirname, "Routes"),
 });
 
 server.listen(process.env.PORT, "0.0.0.0", (err) => {

@@ -1,6 +1,6 @@
 import { v5 } from "uuid";
 import { hash } from "argon2";
-import { User } from "../../models/user";
+import { User } from "../../Models/User";
 import type { FastifyInstance } from "fastify";
 
 interface registerBody {
