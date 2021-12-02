@@ -1,3 +1,4 @@
+import Joi from "joi";
 import { v5 } from "uuid";
 import { hash } from "argon2";
 import { User } from "../../Models/User";
@@ -14,34 +15,30 @@ export default async function BaseRouter(fastify: FastifyInstance) {
     "/register",
     {
       schema: {
-        body: {
-          type: "object",
-          properties: {
-            username: {
-              type: "string",
-              min: 4,
-              max: 24,
-              pattern: "^[a-zA-Z0-9_]+$",
-            },
-            email: { type: "string", format: "email" },
-            password: { type: "string" },
-          },
-          required: ["email", "password", "username"],
-        },
+        body: Joi.object().keys({
+          username: Joi.string()
+            .required()
+            .min(4)
+            .max(24)
+            .pattern(/^[a-zA-Z0-9_]+$/),
+          email: Joi.string().required().email().lowercase(),
+          password: Joi.string().required(),
+        }),
       },
     },
     async (request, reply) => {
       const { username, email, password } = request.body;
 
-      if (email.split("@")[1].split(".")[0].toLowerCase() !== "gmail") {
-        return reply.code(400).send(
-            { error: "Only emails registered under gmail is supported" }
-        );
+      if (email.split("@")[1] !== "gmail.com") {
+        return reply
+          .code(400)
+          .send({ error: "Only emails registered under gmail is supported" });
       }
 
-      if (await User.findOne({ $or: [{username}, {email: email.toLowerCase()}] })) {
+      if (await User.findOne({ $or: [{ username }, { email }] })
+      ) {
         return reply.code(400).send({
-          error: `An account with the username ${username} or email ${email} already exists`,
+          error: `The username or email is already taken`,
         });
       }
 
