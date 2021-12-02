@@ -6,6 +6,11 @@ export interface User extends Document {
   email: string;
   password: string;
   createdAt: Date;
+  invite: {
+    count: number;
+    invited: string[];
+    invitedBy: string;
+  }
 }
 
 const UserSchema = new Schema({
@@ -30,6 +35,20 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  invite: {
+    count: {
+      type: Number,
+      default: 0,
+    },
+    invited: {
+      type: [String],
+      default: [],
+    },
+    invitedBy: {
+      type: String,
+      required: true
+    }
+  }
 });
 
 export const User = models["users"] || model<User>("users", UserSchema);
