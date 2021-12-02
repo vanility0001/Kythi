@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { join } from "path";
 import fastify from "fastify";
 
 const server = fastify();
@@ -10,8 +11,8 @@ if (requiredEnvs.some((env) => !process.env[env])) {
   );
 }
 
-server.get("/", async () => {
-  return { message: "Hello World!" };
+server.register(require("fastify-autoload"), {
+  dir: join(__dirname, "routes"),
 });
 
 server.listen(process.env.PORT, "0.0.0.0", (err) => {
