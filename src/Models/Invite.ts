@@ -1,4 +1,3 @@
-import { string } from "joi";
 import { Document, Schema, model, models } from "mongoose";
 
 export interface Invite extends Document {

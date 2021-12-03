@@ -10,6 +10,10 @@ export interface User extends Document {
   verifiedAt: Date;
   verified: boolean;
   verificationCode?: string;
+  upload: {
+    count: number;
+    key: string;
+  }
   invite: {
     count: number;
     invited: string[];
@@ -50,6 +54,16 @@ const UserSchema = new Schema({
   verificationCode: {
     type: String,
     default: generateRandomString(32),
+  },
+  upload: {
+    count: {
+      type: Number,
+      default: 0,
+    },
+    key: {
+      type: String,
+      default: generateRandomString(16),
+    },
   },
   invite: {
     count: {

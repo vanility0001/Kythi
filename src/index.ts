@@ -16,6 +16,7 @@ server.setNotFoundHandler((_, reply) => {
   return reply.code(404).send("Thats a Four Oh Four. We couldn't find that endpoint.")
 })
 
+server.register(require("fastify-multer").contentParser);
 server.register(require("fastify-helmet"));
 
 server.register(require('fastify-cors'), {
