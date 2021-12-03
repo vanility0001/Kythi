@@ -1,3 +1,4 @@
+import { generateRandomString } from "../Utility";
 import { Document, Schema, model, models } from "mongoose";
 
 export interface User extends Document {
@@ -6,6 +7,9 @@ export interface User extends Document {
   email: string;
   password: string;
   createdAt: Date;
+  verifiedAt: Date;
+  verified: boolean;
+  verificationCode?: string;
   invite: {
     count: number;
     invited: string[];
@@ -35,6 +39,18 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  verifiedAt: {
+    type: Date,
+    default: null,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+    default: generateRandomString(32),
+  },
   invite: {
     count: {
       type: Number,
@@ -52,3 +68,4 @@ const UserSchema = new Schema({
 });
 
 export const User = models["users"] || model<User>("users", UserSchema);
+

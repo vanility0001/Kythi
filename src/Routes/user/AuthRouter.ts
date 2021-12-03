@@ -4,6 +4,7 @@ import { hash } from "argon2";
 import { User } from "../../Models/User";
 import { Invite } from "../../Models/Invite";
 import type { FastifyInstance } from "fastify";
+import { sendVerifyMail } from "../../Utility/Mail";
 
 interface registerBody {
   username: string;
@@ -12,7 +13,7 @@ interface registerBody {
   inviteCode: string;
 }
 
-export default async function BaseRouter(fastify: FastifyInstance) {
+export default async function AuthRouter(fastify: FastifyInstance) {
   fastify.post<{ Body: registerBody }>(
     "/register",
     {
@@ -58,6 +59,7 @@ export default async function BaseRouter(fastify: FastifyInstance) {
       user.email = email;
       user.password = await hash(password);
       user.invite.invitedBy = inviter._id;
+      sendVerifyMail(user);
       await user.save();
 
       inviter.invite.invited.push(user._id);
@@ -65,7 +67,7 @@ export default async function BaseRouter(fastify: FastifyInstance) {
       await inviter.save();
 
       return {
-        message: "Successfully registered",
+        message: "Successfully registered, Check your email for your verification link",
       };
     }
   );

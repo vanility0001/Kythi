@@ -6,7 +6,7 @@ import { request } from "./Utility";
 
 const server = fastify();
 
-const requiredEnvs = ["PORT", "MONGO_URI", "DOCKER_STARTUP_WEBHOOK_URL"];
+const requiredEnvs = ["PORT", "HOST", "NODE_ENV", "MONGO_URI", "MAIL_INFO", "DOCKER_STARTUP_WEBHOOK_URL"];
 if (requiredEnvs.some((env) => !process.env[env])) {
   throw new Error(
     `Missing required environment variables: ${requiredEnvs.join(", ")}`

@@ -4,7 +4,9 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PORT: string;
+      HOST: string;
       MONGO_URI: string;
+      MAIL_INFO: string;
       DOCKER_STARTUP_WEBHOOK_URL: string;
       NODE_ENV: 'development' | 'production';
     }
