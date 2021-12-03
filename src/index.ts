@@ -4,32 +4,39 @@ import fastify from "fastify";
 import { connect } from "mongoose";
 import { request } from "./Utility"; 
 
-const server = fastify();
+const server = fastify({
+  trustProxy: true,
+});
 
-const requiredEnvs = ["PORT", "HOST", "NODE_ENV", "MONGO_URI", "MAIL_INFO", "DOCKER_STARTUP_WEBHOOK_URL"];
-if (requiredEnvs.some((env) => !process.env[env])) {
-  throw new Error(
-    `Missing required environment variables: ${requiredEnvs.join(", ")}`
-  );
-}
+server.setValidatorCompiler(({ schema }) => {
+  return data => schema.validate!(data);
+});
+
+server.setNotFoundHandler((_, reply) => {
+  return reply.code(404).send("Thats a Four Oh Four. We couldn't find that endpoint.")
+})
+
+server.register(require("fastify-helmet"));
+
+server.register(require('fastify-cors'), {
+  origin: [/^http:\/\/localhost:\d{0,4}$/, "https://www.kythi.com"],
+  credentials: true,
+});
+
+server.register(require("fastify-rate-limit"), {
+  timeWindow: 1000,
+  max: 2,
+});
 
 server.register(require("fastify-autoload"), {
   dir: join(__dirname, "Routes"),
 });
 
-server.setValidatorCompiler(({ schema }) => {
-  return data => schema.validate!(data);
-})
-
 server.listen(process.env.PORT, "0.0.0.0", (err) => {
   if (err) throw err;
 
-  console.log(`Listening on http://127.0.0.1:${process.env.PORT}/`);
-
   connect(process.env.MONGO_URI, { keepAlive: true }, (err) => {
     if (err) throw err;
-
-    console.log("Connected to MongoDB");
   });
 
   if (process.env.NODE_ENV === "production") {
@@ -42,4 +49,7 @@ server.listen(process.env.PORT, "0.0.0.0", (err) => {
       }
     });
   }
+
+  console.log(`Listening on http://127.0.0.1:${process.env.PORT}/`);
+  console.log("Connected to MongoDB");
 });
