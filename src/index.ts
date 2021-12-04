@@ -46,7 +46,7 @@ server.listen(process.env.PORT, "0.0.0.0", (err) => {
         username: "Docker Logs",
         avatar_url:
           "https://cdn.discordapp.com/attachments/803816121047318529/915951319527874600/docker_facebook_share.png",
-        content: "Started on docker container",
+        content: "Backend is up and running on docker!",
       }
     });
   }
