@@ -48,7 +48,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         });
       }
 
-      if (await User.findOne({ $or: [{ username: new RegExp(`^${username}$`) }, { email: new RegExp(`^${email}$`) }] })) {
+      if (await User.findOne({ $or: [{ username: new RegExp(`^${username}$`, "i") }, { email: new RegExp(`^${email}$`, "i") }] })) {
         return reply.code(400).send({
           error: `The username or email is already taken`,
         });
