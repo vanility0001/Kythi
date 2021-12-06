@@ -4,8 +4,9 @@ import { hash } from "argon2";
 import { User } from "../../Models/User";
 import { Invite } from "../../Models/Invite";
 import type { FastifyInstance } from "fastify";
-import { generateRandomString } from "../../Utility";
 import { sendVerifyMail } from "../../Utility/Mail";
+import { generateRandomString } from "../../Utility";
+import { allowedMails } from "../../Utility/Constants";
 
 interface registerBody {
   username: string;
@@ -42,9 +43,9 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         });
       }
 
-      if (email.split("@")[1] !== "gmail.com") {
+      if (!allowedMails.includes(email.split("@")[1])) {
         return reply.code(400).send({ 
-          error: "Only emails registered under gmail is supported"
+          error: "Your email domain is unsupported. Try again with another email."
         });
       }
 
