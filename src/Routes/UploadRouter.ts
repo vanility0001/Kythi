@@ -15,15 +15,18 @@ export default async function UploadRouter(fastify: FastifyInstance) {
     { preHandler: [verifyUser, upload.single("file"), verifyFile] },
     async (request, reply) => {
       const { file: reqFile, user } = request;
+      const embeds = user!.upload.settings.embeds;
 
       const file = new File();
-      file.cdnName = generateRandomString(10) + "." + reqFile!.mimetype.split("/")[1];
+      file.cdnName =
+        generateRandomString(10) + "." + reqFile!.mimetype.split("/")[1];
       file._id = file.cdnName;
       file.mimeType = reqFile!.mimetype;
       file.size = reqFile!.size;
       file.path = "/";
       file.uploader._id = user!._id;
       file.uploader.username = user!.username;
+      file.embed = embeds[Math.floor(Math.random() * embeds.length)];
       await file.save();
 
       user!.upload.count++;

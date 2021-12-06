@@ -16,6 +16,20 @@ declare global {
       NODE_ENV: "development" | "production";
     }
   }
+
+  interface Embed {
+    color: string;
+    title: string;
+    description: string;
+    author: {
+      text: string;
+      url: string;
+    };
+    site: {
+      text: string;
+      url: string;
+    }
+  }
 }
 
 declare module "fastify" {

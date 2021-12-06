@@ -13,6 +13,9 @@ export interface User extends Document {
   upload: {
     count: number;
     key: string;
+    settings: {
+      embeds: [];
+    }
   }
   invite: {
     count: number;
@@ -64,6 +67,58 @@ const UserSchema = new Schema({
       type: String,
       default: generateRandomString(16),
     },
+    settings: {
+      embeds: {
+        // ! This is incorrectly typed, everything here is not required, but im waiting until cdn is setup for further testing :>
+        type: [{
+          color: {
+            type: String,
+            required: true,
+          },
+          title: {
+            type: String,
+            required: true,
+          },
+          description: {
+            type: String,
+            required: true,
+          },
+          author: {
+            text: {
+              type: String,
+              required: true,
+            },
+            url: {
+              type: String,
+              required: true,
+            },
+          },
+          site: {
+            text: {
+              type: String,
+              required: true,
+            },
+            url: {
+              type: String,
+              required: true,
+            },
+          }
+        }],
+        default: [{
+          color: "RANDOM",
+          title: "This is a title",
+          description: "This is a description",
+          author: {
+            text: "This is the author",
+            url: "https://google.com",
+          },
+          site: {
+            text: "This is the site",
+            url: "https://google.com",
+          },
+        }],
+      }
+    }
   },
   invite: {
     count: {

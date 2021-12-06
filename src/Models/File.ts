@@ -11,6 +11,7 @@ export interface File extends Document {
     _id: string;
     username: string;
   };
+  embed: Embed;
 }
 
 const FileSchema = new Schema({
@@ -48,6 +49,44 @@ const FileSchema = new Schema({
       required: true,
     },
   },
+  // ! This is incorrectly typed, everything here is not required, but im waiting until cdn is setup for further testing :>
+  embed: {
+    type: {
+      color: {
+        type: String,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      author: {
+        text: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      },
+      site: {
+        text: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      }
+    },
+    required: true,
+  }
 });
 
 export const File = models["files"] || model<File>("files", FileSchema);
