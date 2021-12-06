@@ -9,6 +9,7 @@ declare global {
       PORT: string;
       HOST: string;
       S3_INFO: string;
+      CDN_URL: string;
       MONGO_URI: string;
       S3_BUCKET: string;
       MAIL_INFO: string;
