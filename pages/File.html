@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kythi</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="theme-color" content="{{.Color}}" />
+    <link type="application/json+oembed" href="{{.EmbedURL}}" />
+    {{ if .Image }}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="{{.FileURL}}" />
+    <meta property="og:description" content="{{.Desc}}" />
+    {{ else }}
+    <meta name="twitter:card" content="player" />
+    <meta name="twitter:player" content="{{.FileURL}}" />
+    {{ end }}
+  </head>
+
+  <body>
+    {{ if .Image }}
+    <img src="{{.FileURL}}" />
+    {{ else if .Video }}
+    <video controls autoplay>
+      <source src="{{ .FileURL }}" />
+      Your browser does not support watching videos.
+    </video>
+    {{ end }}
+  </body>
+</html>
