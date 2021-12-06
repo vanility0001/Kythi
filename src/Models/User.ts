@@ -56,7 +56,7 @@ const UserSchema = new Schema({
   },
   verificationCode: {
     type: String,
-    default: generateRandomString(32),
+    required: false,
   },
   upload: {
     count: {

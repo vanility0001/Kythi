@@ -4,6 +4,7 @@ import { hash } from "argon2";
 import { User } from "../../Models/User";
 import { Invite } from "../../Models/Invite";
 import type { FastifyInstance } from "fastify";
+import { generateRandomString } from "../../Utility";
 import { sendVerifyMail } from "../../Utility/Mail";
 
 interface registerBody {
@@ -59,6 +60,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
       user.email = email;
       user.password = await hash(password);
       user.invite.invitedBy = inviter._id;
+      user.verificationCode = generateRandomString(32);
       sendVerifyMail(user);
       await user.save();
 
