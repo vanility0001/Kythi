@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "start": "node ."
+    "start": "node .",
+    "docker": "yarn build && yarn start"
   },
   "dependencies": {
     "discord.js": "^13.3.1",

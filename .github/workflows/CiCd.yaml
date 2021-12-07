@@ -1,0 +1,25 @@
+name: CiCd
+
+on:
+  push:
+    branches:
+      - Bot
+
+jobs:
+  Build-and-Push-to-GHCR:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and Push to GHCR
+        run: |
+          docker build . --tag ghcr.io/nekoyre/kythi-bot:latest
+          docker push ghcr.io/nekoyre/kythi-bot:latest
