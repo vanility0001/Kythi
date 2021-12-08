@@ -10,7 +10,7 @@ export default class PingCommand extends Command {
       chatInputCommand: {
         register: true,
         guildIds: ["915315221202104332"],
-        idHints: ["917939655138230323"],
+        idHints: ["917964346179588107"],
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       },
     });

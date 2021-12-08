@@ -5,7 +5,7 @@ import { join, dirname } from "path";
 import { SapphireClient, container } from "@sapphire/framework";
 
 const client = new SapphireClient({
-  intents: ["GUILDS", "GUILD_MESSAGES"],
+  intents: ["GUILDS"],
 });
 container.stores
   .get("commands")
