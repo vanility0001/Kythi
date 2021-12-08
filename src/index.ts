@@ -1,10 +1,15 @@
 import "dotenv/config";
 import axios from "axios";
-import { SapphireClient } from "@sapphire/framework"
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
+import { SapphireClient, container } from "@sapphire/framework";
 
 const client = new SapphireClient({
   intents: ["GUILDS", "GUILD_MESSAGES"],
 });
+container.stores
+  .get("commands")
+  .registerPath(join(dirname(fileURLToPath(import.meta.url)), "Commands"));
 
 client.on("ready", () => {
   console.log("Ready!");
