@@ -1,8 +1,8 @@
 import "dotenv/config";
 import axios from "axios";
-import { Client } from "discord.js";
+import { SapphireClient } from "@sapphire/framework"
 
-const client = new Client({
+const client = new SapphireClient({
   intents: ["GUILDS", "GUILD_MESSAGES"],
 });
 
@@ -16,12 +16,6 @@ client.on("ready", () => {
         "https://cdn.discordapp.com/attachments/803816121047318529/915951319527874600/docker_facebook_share.png",
       content: "Bot is up and running on docker!",
     });
-  }
-});
-
-client.on("messageCreate", (message) => {
-  if (message.content === "!ping") {
-    message.reply("pong");
   }
 });
 
