@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import {Document, Schema, model, models} from 'mongoose';
 
 export interface Invite extends Document {
   _id: string;
@@ -21,4 +21,5 @@ const InviteSchema = new Schema({
   },
 });
 
-export const Invite = models["invites"] || model<Invite>("invites", InviteSchema);
+export const Invite =
+  models['invites'] || model<Invite>('invites', InviteSchema);

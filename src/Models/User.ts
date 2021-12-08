@@ -1,5 +1,5 @@
-import { generateRandomString } from "../Utility";
-import { Document, Schema, model, models } from "mongoose";
+import {generateRandomString} from '../Utility';
+import {Document, Schema, model, models} from 'mongoose';
 
 export interface User extends Document {
   _id: string;
@@ -69,7 +69,7 @@ const UserSchema = new Schema({
     },
     settings: {
       embeds: {
-        // ! This is incorrectly typed, everything here is not required, but im waiting until cdn is setup for further testing :>
+        // ! This is incorrectly typed
         type: [{
           color: {
             type: String,
@@ -102,23 +102,23 @@ const UserSchema = new Schema({
               type: String,
               required: true,
             },
-          }
+          },
         }],
         default: [{
-          color: "RANDOM",
-          title: "This is a title",
-          description: "This is a description",
+          color: 'RANDOM',
+          title: 'This is a title',
+          description: 'This is a description',
           author: {
-            text: "This is the author",
-            url: "https://google.com",
+            text: 'This is the author',
+            url: 'https://google.com',
           },
           site: {
-            text: "This is the site",
-            url: "https://google.com",
+            text: 'This is the site',
+            url: 'https://google.com',
           },
         }],
-      }
-    }
+      },
+    },
   },
   invite: {
     count: {
@@ -131,10 +131,10 @@ const UserSchema = new Schema({
     },
     invitedBy: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 });
 
-export const User = models["users"] || model<User>("users", UserSchema);
+export const User = models['users'] || model<User>('users', UserSchema);
 

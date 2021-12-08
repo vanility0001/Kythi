@@ -10,6 +10,8 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "start": "node .",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "docker": "yarn build && yarn start"
   },
   "dependencies": {
@@ -36,6 +38,10 @@
     "@types/nodemailer": "^6.4.4",
     "@types/passport-local": "^1.0.34",
     "@types/uuid": "^8.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "eslint": "^8.4.1",
+    "eslint-config-google": "^0.14.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.5.2"
   }

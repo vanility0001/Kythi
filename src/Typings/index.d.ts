@@ -1,6 +1,5 @@
-import { User } from "../Models/User";
-import { File } from "fastify-multer/lib/interfaces";
-import { FastifySchema, FastifyRequest } from "fastify";
+import {User} from '../Models/User';
+import {File} from 'fastify-multer/lib/interfaces';
 
 declare global {
   namespace NodeJS {
@@ -9,7 +8,7 @@ declare global {
       HOST: string;
       CDN_URL: string;
       S3_INFO: string;
-      NODE_ENV: "development" | "production";
+      NODE_ENV: 'development' | 'production';
       S3_BUCKET: string;
       MONGO_URI: string;
       MAIL_INFO: string;
@@ -33,9 +32,11 @@ declare global {
   }
 }
 
-declare module "fastify" {
+declare module 'fastify' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface PassportUser extends User {}
   interface FastifySchema extends FastifySchema {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This is undocumented
     validate?: (any) => any;
   }
 

@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import {Document, Schema, model, models} from 'mongoose';
 
 export interface File extends Document {
   _id: string;
@@ -49,7 +49,7 @@ const FileSchema = new Schema({
       required: true,
     },
   },
-  // ! This is incorrectly typed, everything here is not required, but im waiting until cdn is setup for further testing :>
+  // ! This is incorrectly typed
   embed: {
     type: {
       color: {
@@ -83,10 +83,10 @@ const FileSchema = new Schema({
           type: String,
           required: true,
         },
-      }
+      },
     },
     required: true,
-  }
+  },
 });
 
-export const File = models["files"] || model<File>("files", FileSchema);
+export const File = models['files'] || model<File>('files', FileSchema);
