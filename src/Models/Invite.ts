@@ -1,3 +1,4 @@
+import {generateRandomString} from '../Utility';
 import {Document, Schema, model, models} from 'mongoose';
 
 export interface Invite extends Document {
@@ -9,7 +10,10 @@ export interface Invite extends Document {
 const InviteSchema = new Schema({
   _id: {
     type: String,
-    required: true,
+    default: () =>
+      `${generateRandomString(7)}-${generateRandomString(
+          8,
+      )}-${generateRandomString(9)}`,
   },
   createdAt: {
     type: Date,

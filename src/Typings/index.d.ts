@@ -13,6 +13,7 @@ declare global {
       MONGO_URI: string;
       MAIL_INFO: string;
       COOKIE_KEY: string;
+      BOT_API_KEY: string;
       DOCKER_STARTUP_WEBHOOK_URL: string;
     }
   }
