@@ -1,20 +1,20 @@
 import { User } from "../Models/User";
-import { File } from "fastify-multer/lib/interfaces"
+import { File } from "fastify-multer/lib/interfaces";
 import { FastifySchema, FastifyRequest } from "fastify";
-
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PORT: string;
       HOST: string;
-      S3_INFO: string;
       CDN_URL: string;
-      MONGO_URI: string;
-      S3_BUCKET: string;
-      MAIL_INFO: string;
-      DOCKER_STARTUP_WEBHOOK_URL: string;
+      S3_INFO: string;
       NODE_ENV: "development" | "production";
+      S3_BUCKET: string;
+      MONGO_URI: string;
+      MAIL_INFO: string;
+      COOKIE_KEY: string;
+      DOCKER_STARTUP_WEBHOOK_URL: string;
     }
   }
 
@@ -29,11 +29,12 @@ declare global {
     site: {
       text: string;
       url: string;
-    }
+    };
   }
 }
 
 declare module "fastify" {
+  interface PassportUser extends User {}
   interface FastifySchema extends FastifySchema {
     validate?: (any) => any;
   }

@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { v5 } from "uuid";
 import { hash } from "argon2";
+import passport from "fastify-passport";
 import { User } from "../../Models/User";
 import { Invite } from "../../Models/Invite";
 import type { FastifyInstance } from "fastify";
@@ -28,7 +29,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
             .pattern(/^[a-zA-Z0-9_]+$/),
           email: Joi.string().required().email().lowercase(),
           password: Joi.string().required(),
-          inviteCode: Joi.string().required()
+          inviteCode: Joi.string().required(),
         }),
       },
     },
@@ -44,12 +45,20 @@ export default async function AuthRouter(fastify: FastifyInstance) {
       }
 
       if (!allowedMails.includes(email.split("@")[1])) {
-        return reply.code(400).send({ 
-          error: "Your email domain is unsupported. Try again with another email."
+        return reply.code(400).send({
+          error:
+            "Your email domain is unsupported. Try again with another email.",
         });
       }
 
-      if (await User.findOne({ $or: [{ username: new RegExp(`^${username}$`, "i") }, { email: new RegExp(`^${email}$`, "i") }] })) {
+      if (
+        await User.findOne({
+          $or: [
+            { username: new RegExp(`^${username}$`, "i") },
+            { email: new RegExp(`^${email}$`, "i") },
+          ],
+        })
+      ) {
         return reply.code(400).send({
           error: `The username or email is already taken`,
         });
@@ -70,7 +79,35 @@ export default async function AuthRouter(fastify: FastifyInstance) {
       await inviter.save();
 
       return {
-        message: "Successfully registered, Check your email for your verification link",
+        message:
+          "Successfully registered, Check your email for your verification link",
+      };
+    }
+  );
+
+  fastify.post(
+    "/login",
+    {
+      schema: {
+        body: Joi.object().keys({
+          username: Joi.string().required(),
+          password: Joi.string().required(),
+        }),
+      },
+      preHandler: passport.authenticate("local"),
+    },
+    async (request, reply) => {
+      const user = request.user as User;
+
+      if (!user.verified || !user.verifiedAt) {
+        return reply.code(400).send({
+          error: "Please verify your email first",
+        });
+      }
+
+      return {
+        message: "Successfully logged in",
+        user,
       };
     }
   );

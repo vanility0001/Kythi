@@ -7,3 +7,4 @@ Content-Type: application/json
     "password":"Password123",
     "inviteCode": "TestingInvite123"
 }
+

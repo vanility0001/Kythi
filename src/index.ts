@@ -1,25 +1,30 @@
 import "dotenv/config";
 import { join } from "path";
 import fastify from "fastify";
+import { verify } from "argon2";
 import { connect } from "mongoose";
-import { request } from "./Utility"; 
+import { request } from "./Utility";
+import { User } from "./Models/User";
+import { Strategy } from "passport-local";
+import fastifyPassport from "fastify-passport";
 
 const server = fastify({
   trustProxy: true,
 });
 
 server.setValidatorCompiler(({ schema }) => {
-  return data => schema.validate!(data);
+  return (data) => schema.validate!(data);
 });
 
 server.setNotFoundHandler((_, reply) => {
-  return reply.code(404).send("Thats a Four Oh Four. We couldn't find that endpoint.")
-})
+  return reply
+    .code(404)
+    .send("Thats a Four Oh Four. We couldn't find that endpoint.");
+});
 
-server.register(require("fastify-multer").contentParser);
 server.register(require("fastify-helmet"));
 
-server.register(require('fastify-cors'), {
+server.register(require("fastify-cors"), {
   origin: [/^http:\/\/localhost:\d{0,4}$/, "https://www.kythi.com"],
   credentials: true,
 });
@@ -28,6 +33,39 @@ server.register(require("fastify-rate-limit"), {
   timeWindow: 1000,
   max: 2,
 });
+
+server.register(require("fastify-multer").contentParser);
+
+server.register(require("fastify-secure-session"), {
+  key: Buffer.from(process.env.COOKIE_KEY, "hex"),
+});
+
+server.register(fastifyPassport.initialize());
+server.register(fastifyPassport.secureSession());
+
+fastifyPassport.use(
+  new Strategy((username, password, done) => {
+    User.findOne(
+      { $or: [{ username }, { email: username }] },
+      async (err: any, user: User) => {
+        if (err) {
+          return done(err);
+        }
+
+        if (!user || !(await verify(user.password, password))) {
+          return done(null, false);
+        }
+
+        return done(null, user);
+      }
+    );
+  })
+);
+
+fastifyPassport.registerUserSerializer(async (user: User) => user._id);
+fastifyPassport.registerUserDeserializer(
+  async (id: string) => await User.findById(id)
+);
 
 server.register(require("fastify-autoload"), {
   dir: join(__dirname, "Routes"),
@@ -47,7 +85,7 @@ server.listen(process.env.PORT, "0.0.0.0", (err) => {
         avatar_url:
           "https://cdn.discordapp.com/attachments/803816121047318529/915951319527874600/docker_facebook_share.png",
         content: "Backend is up and running on docker!",
-      }
+      },
     });
   }
 
