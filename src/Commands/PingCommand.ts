@@ -6,12 +6,12 @@ export default class PingCommand extends Command {
     super(context, {
       ...options,
       name: "ping",
-      description: "🏓 Ponged!",
+      description: "🏓 Pong!",
       chatInputCommand: {
         register: true,
         guildIds: ["915315221202104332"],
         idHints: ["917939655138230323"],
-        behaviorWhenNotIdentical: RegisterBehavior.LogToConsole,
+        behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       },
     });
   }
