@@ -18,6 +18,8 @@ export default async function VerificationRouter(fastify: FastifyInstance) {
 
         if (!verifyingUser) {
           reply.code(400).send({
+            statusCode: 400,
+            error: 'Bad Request',
             message: 'Unknown Verification Code',
           });
         }

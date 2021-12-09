@@ -49,6 +49,8 @@ export default async function UploadRouter(fastify: FastifyInstance) {
         uploadFile(file, reqFile.buffer);
 
         reply.send({
+          statusCode: 200,
+          message: 'Successfully uploaded',
           imageURL: `${process.env.CDN_URL}/${file._id}`,
         });
       },

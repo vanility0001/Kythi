@@ -44,14 +44,17 @@ export default async function AuthRouter(fastify: FastifyInstance) {
 
         if (!inviteUsed || !inviter) {
           return reply.code(400).send({
-            error: 'Invalid Invite Code',
+            statusCode: 400,
+            error: 'Bad Request',
+            message: 'Invalid Invite Code',
           });
         }
 
         if (!allowedMails.includes(email.split('@')[1])) {
           return reply.code(400).send({
-            error:
-            'Your email domain is unsupported. Try again with another email.',
+            statusCode: 400,
+            error: 'Bad Request',
+            message: 'Your email domain is unsupported. Try again with another email.',
           });
         }
 
@@ -64,7 +67,9 @@ export default async function AuthRouter(fastify: FastifyInstance) {
           })
         ) {
           return reply.code(400).send({
-            error: `The username or email is already taken`,
+            statusCode: 400,
+            error: 'Bad Request',
+            message: 'The username or email is already taken',
           });
         }
 
@@ -83,8 +88,8 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         await inviter.save();
 
         return {
-          message:
-          'Successfully registered, Check your email for your verification link',
+          statusCode: 200,
+          message: 'Successfully registered, Check your email for your verification link',
         };
       }
   );
@@ -105,11 +110,14 @@ export default async function AuthRouter(fastify: FastifyInstance) {
 
         if (!user.verified || !user.verifiedAt) {
           return reply.code(400).send({
-            error: 'Please verify your email first',
+            statusCode: 400,
+            error: 'Bad Request',
+            message: 'Please verify your email first',
           });
         }
 
         return {
+          statusCode: 200,
           message: 'Successfully logged in',
           user,
         };

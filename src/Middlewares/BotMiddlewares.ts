@@ -14,6 +14,8 @@ export async function isAuthorized(
     !request.headers.authorization ||
     request.headers.authorization !== process.env.BOT_API_KEY
   ) {
-    return reply.status(401).send({error: 'Unauthorized'});
+    return reply
+        .status(401)
+        .send({statusCode: 400, error: 'Bad Request', message: 'Invalid API Key'});
   }
 }

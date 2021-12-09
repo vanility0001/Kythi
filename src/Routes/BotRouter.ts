@@ -29,8 +29,10 @@ export default async function BotRouter(fastify: FastifyInstance) {
         const user: User = await User.findById(request.body.creator);
 
         if (!user) {
-          return reply.code(400).send({
-            error: 'Unknown User',
+          return reply.code(404).send({
+            statusCode: 404,
+            error: 'Not Found',
+            message: 'Unknown User',
           });
         }
 
@@ -44,7 +46,7 @@ export default async function BotRouter(fastify: FastifyInstance) {
           invites.push(invite._id);
         }
 
-        return reply.code(200).send({invites});
+        return {statusCode: 200, invites};
       },
   );
 }

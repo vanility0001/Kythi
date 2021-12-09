@@ -28,6 +28,6 @@ export async function verifyUser(request: FastifyRequest, reply: FastifyReply) {
 */
 export async function verifyFile(request: FastifyRequest, reply: FastifyReply) {
   if (!request.file || !request.file.buffer) {
-    return reply.status(401).send({message: 'No file provided'});
+    return reply.status(400).send({statusCode: 400, error: 'Bad Request', message: 'No file provided'});
   }
 }
