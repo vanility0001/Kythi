@@ -1,3 +1,4 @@
+import {sendReply} from '../Utility';
 import {FastifyRequest, FastifyReply} from 'fastify';
 
 /**
@@ -10,12 +11,11 @@ export async function isAuthorized(
     request: FastifyRequest,
     reply: FastifyReply,
 ) {
-  if (
-    !request.headers.authorization ||
-    request.headers.authorization !== process.env.BOT_API_KEY
-  ) {
-    return reply
-        .status(401)
-        .send({statusCode: 400, error: 'Bad Request', message: 'Invalid API Key'});
+  if (!request.headers.authorization) {
+    return sendReply(reply, 401, 'No API Key provided.');
+  }
+
+  if (request.headers.authorization !== process.env.BOT_API_KEY) {
+    return sendReply(reply, 403, 'Invalid API Key.');
   }
 }

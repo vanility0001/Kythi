@@ -1,4 +1,5 @@
 import {User} from '../Models/User';
+import {sendReply} from '../Utility';
 import {FastifyRequest, FastifyReply} from 'fastify';
 
 /**
@@ -8,14 +9,14 @@ import {FastifyRequest, FastifyReply} from 'fastify';
 */
 export async function verifyUser(request: FastifyRequest, reply: FastifyReply) {
   if (!request.headers.authorization) {
-    return reply.status(401).send({message: 'No upload key provided'});
+    return sendReply(reply, 401, 'No Upload Key provided');
   }
 
   const user = await User.findOne({
     'upload.key': request.headers.authorization,
   });
 
-  if (!user) return reply.status(401).send({message: 'Invalid upload key'});
+  if (!user) return sendReply(reply, 403, 'Invalid Upload Key');
 
   request.user = user;
   return;
@@ -28,6 +29,6 @@ export async function verifyUser(request: FastifyRequest, reply: FastifyReply) {
 */
 export async function verifyFile(request: FastifyRequest, reply: FastifyReply) {
   if (!request.file || !request.file.buffer) {
-    return reply.status(400).send({statusCode: 400, error: 'Bad Request', message: 'No file provided'});
+    return sendReply(reply, 400, 'No file provided');
   }
 }

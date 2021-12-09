@@ -2,6 +2,7 @@ import Joi from 'joi';
 import {v5} from 'uuid';
 import {hash} from 'argon2';
 import {User} from '../../Models/User';
+import {sendReply} from '../../Utility';
 import passport from 'fastify-passport';
 import {Invite} from '../../Models/Invite';
 import type {FastifyInstance} from 'fastify';
@@ -43,19 +44,11 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         const inviter: User = await User.findById(inviteUsed?.createdBy);
 
         if (!inviteUsed || !inviter) {
-          return reply.code(400).send({
-            statusCode: 400,
-            error: 'Bad Request',
-            message: 'Invalid Invite Code',
-          });
+          return sendReply(reply, 400, 'Invalid invite code');
         }
 
         if (!allowedMails.includes(email.split('@')[1])) {
-          return reply.code(400).send({
-            statusCode: 400,
-            error: 'Bad Request',
-            message: 'Your email domain is unsupported. Try again with another email.',
-          });
+          return sendReply(reply, 400, 'Your email domain is unsupported. Try again with another email.');
         }
 
         if (
@@ -66,11 +59,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
             ],
           })
         ) {
-          return reply.code(400).send({
-            statusCode: 400,
-            error: 'Bad Request',
-            message: 'The username or email is already taken',
-          });
+          return sendReply(reply, 400, 'The username or email is taken');
         }
 
         const user = new User();
@@ -87,10 +76,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         await inviteUsed.remove();
         await inviter.save();
 
-        return {
-          statusCode: 200,
-          message: 'Successfully registered, Check your email for your verification link',
-        };
+        return sendReply(reply, 200, 'Successfully registered');
       }
   );
 
@@ -109,18 +95,10 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         const user = request.user as User;
 
         if (!user.verified || !user.verifiedAt) {
-          return reply.code(400).send({
-            statusCode: 400,
-            error: 'Bad Request',
-            message: 'Please verify your email first',
-          });
+          return sendReply(reply, 400, 'Verify your email and try again');
         }
 
-        return {
-          statusCode: 200,
-          message: 'Successfully logged in',
-          user,
-        };
+        return sendReply(reply, 200, 'Successfully logged in', {user});
       }
   );
 }

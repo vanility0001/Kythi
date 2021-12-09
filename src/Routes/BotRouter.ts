@@ -1,8 +1,9 @@
-import type {FastifyInstance} from 'fastify';
 import Joi from 'joi';
-import {isAuthorized} from '../Middlewares/BotMiddlewares';
-import {Invite} from '../Models/Invite';
 import {User} from '../Models/User';
+import {sendReply} from '../Utility';
+import {Invite} from '../Models/Invite';
+import type {FastifyInstance} from 'fastify';
+import {isAuthorized} from '../Middlewares/BotMiddlewares';
 
 interface generateInviteBody {
   count: number;
@@ -29,11 +30,7 @@ export default async function BotRouter(fastify: FastifyInstance) {
         const user: User = await User.findById(request.body.creator);
 
         if (!user) {
-          return reply.code(404).send({
-            statusCode: 404,
-            error: 'Not Found',
-            message: 'Unknown User',
-          });
+          return sendReply(reply, 404, 'Unknown user id');
         }
 
         const invites = [];
@@ -46,7 +43,7 @@ export default async function BotRouter(fastify: FastifyInstance) {
           invites.push(invite._id);
         }
 
-        return {statusCode: 200, invites};
+        return sendReply(reply, 200, null, {invites});
       },
   );
 }

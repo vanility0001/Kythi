@@ -1,4 +1,6 @@
 import axios, {Method, AxiosRequestHeaders} from 'axios';
+import {FastifyReply} from 'fastify';
+import {errorCodes} from './Constants';
 
 interface requestParams {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,4 +48,34 @@ export function generateRandomString(length: number): string {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
+}
+
+/**
+ A function to streamline responses
+  @param {FastifyReply} reply The reply object
+  @param {number} statusCode The status code to send
+  @param {message} message message to send
+  @param {any[]} additonalData Any additional data to send
+  @return {FastifyReply} The reply object
+*/
+export function sendReply(
+    reply: FastifyReply,
+    statusCode: number,
+    message: string | null,
+    additonalData?: object,
+): FastifyReply {
+  return reply.code(statusCode).send(
+    errorCodes[statusCode as keyof typeof errorCodes] ?
+      {
+        statusCode,
+        error: errorCodes[statusCode as keyof typeof errorCodes],
+        message,
+        ...additonalData,
+      } :
+      {
+        statusCode,
+        message,
+        ...additonalData,
+      },
+  );
 }

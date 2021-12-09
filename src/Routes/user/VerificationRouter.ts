@@ -1,5 +1,6 @@
-import type {FastifyInstance} from 'fastify';
 import {User} from '../../Models/User';
+import {sendReply} from '../../Utility';
+import type {FastifyInstance} from 'fastify';
 
 interface verifyParams {
   verificationCode: string;
@@ -17,11 +18,7 @@ export default async function VerificationRouter(fastify: FastifyInstance) {
         const verifyingUser: User = await User.findOne({verificationCode});
 
         if (!verifyingUser) {
-          reply.code(400).send({
-            statusCode: 400,
-            error: 'Bad Request',
-            message: 'Unknown Verification Code',
-          });
+          return sendReply(reply, 400, 'Invalid verification code');
         }
 
         await verifyingUser.updateOne({

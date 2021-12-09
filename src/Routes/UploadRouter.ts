@@ -3,14 +3,13 @@ import {File} from '../Models/File';
 import {User} from '../Models/User';
 import type {FastifyInstance} from 'fastify';
 import {uploadFile} from '../Utility/Storage';
-import {generateRandomString} from '../Utility';
+import {generateRandomString, sendReply} from '../Utility';
 import {File as FileType} from 'fastify-multer/lib/interfaces';
 import {verifyFile, verifyUser} from '../Middlewares/UploadMiddlewares';
 
 interface fileWithBuffer extends FileType {
   buffer: Buffer;
 }
-
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -48,11 +47,7 @@ export default async function UploadRouter(fastify: FastifyInstance) {
 
         uploadFile(file, reqFile.buffer);
 
-        reply.send({
-          statusCode: 200,
-          message: 'Successfully uploaded',
-          imageURL: `${process.env.CDN_URL}/${file._id}`,
-        });
+        return sendReply(reply, 200, 'Successfully uploaded', {imageURL: `${process.env.CDN_URL}/${file._id}`});
       },
   );
 }
