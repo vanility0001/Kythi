@@ -1,11 +1,12 @@
+import API from "../api";
 import * as React from "react";
 import { NextSeo } from "next-seo";
 import "focus-visible/dist/focus-visible";
 import { BsImages } from "react-icons/bs";
 import { GiPartyHat } from "react-icons/gi";
+import { SiSpeedtest } from "react-icons/si";
 import { SiMaildotru } from "react-icons/si";
 import { BiUserCircle } from "react-icons/bi";
-import { SiSpeedtest } from "react-icons/si";
 import styles from "../styles/index.module.css";
 import { RiFingerprint2Line } from "react-icons/ri";
 import { FaUserAltSlash, FaUserAlt, FaLock, FaLockOpen } from "react-icons/fa";
@@ -28,6 +29,7 @@ import {
   Button,
   Heading,
   Divider,
+  useToast,
   ModalBody,
   InputGroup,
   ModalFooter,
@@ -64,7 +66,7 @@ export default function Homepage() {
   });
   const RegPassword = () => setShow(!show);
   const [show, setShow] = React.useState(false);
-  1;
+  const toast = useToast();
   const modals = useColorModeValue("white", "#2E3440");
 
   const handleRegisterChange = (e) => {
@@ -115,6 +117,57 @@ export default function Homepage() {
         return;
     }
   };
+
+  function registerSubmit() {
+    API.register(
+      registerInfo.username,
+      registerInfo.email,
+      registerInfo.password,
+      registerInfo.invite
+    )
+      .then((data) => {
+        setRegisterInfo({
+          username: "",
+          password: "",
+          email: "",
+          invite: "",
+        });
+
+        toast({
+          title: "Success!",
+          description: data.message,
+          status: "success",
+          position: "top-right",
+          duration: 9000,
+          isClosable: true,
+          variant: "left-accent",
+        });
+      })
+      .catch((err) => {
+        if (err.message === "Network Error") {
+          return toast({
+            title: "You seemed to have encountered an error!",
+            description:
+              "The API is unfortunately down please check back later.",
+            status: "error",
+            position: "top-right",
+            duration: 9000,
+            isClosable: true,
+            variant: "left-accent",
+          });
+        }
+
+        return toast({
+          title: "You seemed to have encountered an error!",
+          description: err.data.message,
+          status: "error",
+          position: "top-right",
+          duration: 9000,
+          isClosable: true,
+          variant: "left-accent",
+        });
+      });
+  }
 
   return (
     <>
@@ -315,7 +368,7 @@ export default function Homepage() {
                   width="100%"
                   colorScheme="blue"
                   variant="outline"
-                  onClick={function () {}}
+                  onClick={registerSubmit}
                 >
                   Register
                 </Button>
