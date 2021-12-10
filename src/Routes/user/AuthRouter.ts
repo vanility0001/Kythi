@@ -33,7 +33,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
                 .max(24)
                 .pattern(/^[a-zA-Z0-9_]+$/),
             email: Joi.string().required().email().lowercase(),
-            password: Joi.string().required(),
+            password: Joi.string().min(10).max(100).required(),
             inviteCode: Joi.string().required(),
           }),
         },
@@ -76,7 +76,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         await inviteUsed.remove();
         await inviter.save();
 
-        return sendReply(reply, 200, 'Successfully registered');
+        return sendReply(reply, 200, 'Successfully registered! Check your email for your verfication link.')
       }
   );
 
