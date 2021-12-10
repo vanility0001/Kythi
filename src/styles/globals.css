@@ -1,0 +1,23 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+::-webkit-scrollbar {
+    width:10px;
+  }
+
+   
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 20px #1A202C;
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background-color: #171923;
+    border-radius: 8px;
+  }
+  
+  .bloo-focus-visible :focus:not([data-focus-visible-added]) {
+    outline: none;
+    box-shadow: none;
+  }

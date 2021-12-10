@@ -1,0 +1,15 @@
+@import "/Frontend/node_modules/nord/src/css/nord.css";
+
+.nord {
+  color: #d8dee9;
+}
+.center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo{
+    margin-top: 36px;
+    height: 16px;
+  }
+  
