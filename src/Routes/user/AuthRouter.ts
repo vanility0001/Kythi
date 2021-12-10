@@ -76,7 +76,7 @@ export default async function AuthRouter(fastify: FastifyInstance) {
         await inviteUsed.remove();
         await inviter.save();
 
-        return sendReply(reply, 200, 'Successfully registered! Check your email for your verfication link.')
+        return sendReply(reply, 200, 'Successfully registered! Check your email for your verfication link.');
       }
   );
 
